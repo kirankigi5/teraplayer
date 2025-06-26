@@ -1,5 +1,5 @@
-# Use Node.js 18 as base image
-FROM node:18-alpine
+# Use Node.js 20 as base image
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
@@ -9,8 +9,8 @@ COPY package*.json ./
 COPY apps/backend/package*.json ./apps/backend/
 COPY apps/frontend/package*.json ./apps/frontend/
 
-# Install dependencies
-RUN npm install
+# Install dependencies for workspaces
+RUN npm install --workspace=apps/backend && npm install --workspace=apps/frontend
 
 # Copy source code
 COPY . .

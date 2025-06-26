@@ -82,7 +82,7 @@ function App() {
           className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition disabled:opacity-50"
           disabled={loading}
         >
-          {loading ? 'Processing TeraBox Link...' : 'Play TeraBox Video Online'}
+          {loading ? 'Processing TeraBox Link...' : 'Enter TeraBox Link'}
         </button>
       </form>
       {error && <div className="mt-4 text-red-600 dark:text-red-400">{error}</div>}

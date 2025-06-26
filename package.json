@@ -13,13 +13,13 @@
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "build": "npm run build --workspace=apps/frontend && npm run build --workspace=apps/backend",
     "start": "npm run start --workspace=apps/backend",
-    "postinstall": "npm install --workspace=apps/backend && npm install --workspace=apps/frontend"
+    "railway:install": "npm install --workspace=apps/backend && npm install --workspace=apps/frontend"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.0.0",
     "npm": ">=9.0.0"
   }
 }
