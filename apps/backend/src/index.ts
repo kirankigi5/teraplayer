@@ -57,39 +57,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/parse', parseRoute);
 
-// Root endpoint for Railway health checks
-app.get('/', (_req, res) => {
-  if (NODE_ENV === 'production') {
-    // In production, serve index.html if frontend exists, otherwise show API info
-    const indexPath = path.join(frontendPath || '', 'index.html');
-    const fs = require('fs');
-    if (frontendPath && fs.existsSync(indexPath)) {
-      res.sendFile(indexPath);
-    } else {
-      res.json({
-        message: 'TeraPlayer Backend API',
-        version: '1.0.0',
-        status: 'healthy',
-        timestamp: new Date().toISOString(),
-        endpoints: {
-          health: '/health',
-          parse: '/api/parse'
-        }
-      });
-    }
-  } else {
-    res.json({
-      message: 'TeraPlayer Backend API',
-      version: '1.0.0',
-      endpoints: {
-        health: '/health',
-        parse: '/api/parse'
-      }
-    });
-  }
-});
-
-// Health check endpoint
+// Health check endpoints (these must work for Railway)
 app.get('/health', (_req, res) => {
   res.status(200).json({ 
     status: 'healthy',
@@ -100,7 +68,6 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// Additional health check endpoint that Railway might use
 app.get('/healthz', (_req, res) => {
   res.status(200).send('OK');
 });
@@ -117,7 +84,7 @@ app.get('/api', (_req, res) => {
   });
 });
 
-// Serve static files from frontend build in production
+// Initialize frontend path for production
 let frontendPath = '';
 if (NODE_ENV === 'production') {
   // Try multiple possible paths for Railway compatibility
@@ -144,7 +111,53 @@ if (NODE_ENV === 'production') {
   }
   
   console.log(`📁 Serving static files from: ${frontendPath}`);
-  
+}
+
+// Root endpoint - defined after frontendPath is set
+app.get('/', (_req, res) => {
+  if (NODE_ENV === 'production' && frontendPath) {
+    // In production, try to serve index.html if it exists
+    const indexPath = path.join(frontendPath, 'index.html');
+    const fs = require('fs');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath, (err) => {
+        if (err) {
+          console.error('Error serving index.html from root:', err);
+          res.status(200).json({
+            message: 'TeraPlayer - Railway Deployment',
+            status: 'healthy',
+            version: '1.0.0',
+            timestamp: new Date().toISOString()
+          });
+        }
+      });
+    } else {
+      res.status(200).json({
+        message: 'TeraPlayer Backend API',
+        version: '1.0.0',
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        frontendPath: frontendPath || 'not found',
+        endpoints: {
+          health: '/health',
+          parse: '/api/parse'
+        }
+      });
+    }
+  } else {
+    res.status(200).json({
+      message: 'TeraPlayer Backend API',
+      version: '1.0.0',
+      endpoints: {
+        health: '/health',
+        parse: '/api/parse'
+      }
+    });
+  }
+});
+
+// Serve static files from frontend build in production
+if (NODE_ENV === 'production' && frontendPath) {
   // Serve static files
   app.use(express.static(frontendPath, {
     maxAge: '1d',
@@ -212,11 +225,35 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
 
 // Start server
 const port = Number(PORT);
+
+// Ensure port is valid
+if (isNaN(port) || port <= 0) {
+  console.error('❌ Invalid PORT value:', PORT);
+  process.exit(1);
+}
+
 const server = app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 TeraPlayer backend server running on port ${port}`);
   console.log(`📝 Environment: ${NODE_ENV}`);
   console.log(`🔗 Health check: http://localhost:${port}/health`);
   console.log(`🌐 Server listening on 0.0.0.0:${port}`);
+  
+  // Immediately test our own health endpoint
+  setTimeout(() => {
+    const http = require('http');
+    const healthReq = http.request({
+      hostname: 'localhost',
+      port: port,
+      path: '/health',
+      method: 'GET'
+    }, (res: any) => {
+      console.log(`✅ Self health check: ${res.statusCode}`);
+    });
+    healthReq.on('error', (err: any) => {
+      console.log(`❌ Self health check failed:`, err.message);
+    });
+    healthReq.end();
+  }, 1000);
   
   // Log filesystem info in production for debugging
   if (NODE_ENV === 'production') {

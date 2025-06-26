@@ -46,37 +46,6 @@ app.use((req, res, next) => {
     return next();
 });
 app.use('/api/parse', parse_1.default);
-app.get('/', (_req, res) => {
-    if (NODE_ENV === 'production') {
-        const indexPath = path_1.default.join(frontendPath || '', 'index.html');
-        const fs = require('fs');
-        if (frontendPath && fs.existsSync(indexPath)) {
-            res.sendFile(indexPath);
-        }
-        else {
-            res.json({
-                message: 'TeraPlayer Backend API',
-                version: '1.0.0',
-                status: 'healthy',
-                timestamp: new Date().toISOString(),
-                endpoints: {
-                    health: '/health',
-                    parse: '/api/parse'
-                }
-            });
-        }
-    }
-    else {
-        res.json({
-            message: 'TeraPlayer Backend API',
-            version: '1.0.0',
-            endpoints: {
-                health: '/health',
-                parse: '/api/parse'
-            }
-        });
-    }
-});
 app.get('/health', (_req, res) => {
     res.status(200).json({
         status: 'healthy',
@@ -122,6 +91,50 @@ if (NODE_ENV === 'production') {
         frontendPath = possiblePaths[0] || path_1.default.join(__dirname, '../../frontend/dist');
     }
     console.log(`📁 Serving static files from: ${frontendPath}`);
+}
+app.get('/', (_req, res) => {
+    if (NODE_ENV === 'production' && frontendPath) {
+        const indexPath = path_1.default.join(frontendPath, 'index.html');
+        const fs = require('fs');
+        if (fs.existsSync(indexPath)) {
+            res.sendFile(indexPath, (err) => {
+                if (err) {
+                    console.error('Error serving index.html from root:', err);
+                    res.status(200).json({
+                        message: 'TeraPlayer - Railway Deployment',
+                        status: 'healthy',
+                        version: '1.0.0',
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            });
+        }
+        else {
+            res.status(200).json({
+                message: 'TeraPlayer Backend API',
+                version: '1.0.0',
+                status: 'healthy',
+                timestamp: new Date().toISOString(),
+                frontendPath: frontendPath || 'not found',
+                endpoints: {
+                    health: '/health',
+                    parse: '/api/parse'
+                }
+            });
+        }
+    }
+    else {
+        res.status(200).json({
+            message: 'TeraPlayer Backend API',
+            version: '1.0.0',
+            endpoints: {
+                health: '/health',
+                parse: '/api/parse'
+            }
+        });
+    }
+});
+if (NODE_ENV === 'production' && frontendPath) {
     app.use(express_1.default.static(frontendPath, {
         maxAge: '1d',
         etag: true,
@@ -179,11 +192,30 @@ app.use((err, _req, res, _next) => {
     });
 });
 const port = Number(PORT);
+if (isNaN(port) || port <= 0) {
+    console.error('❌ Invalid PORT value:', PORT);
+    process.exit(1);
+}
 const server = app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 TeraPlayer backend server running on port ${port}`);
     console.log(`📝 Environment: ${NODE_ENV}`);
     console.log(`🔗 Health check: http://localhost:${port}/health`);
     console.log(`🌐 Server listening on 0.0.0.0:${port}`);
+    setTimeout(() => {
+        const http = require('http');
+        const healthReq = http.request({
+            hostname: 'localhost',
+            port: port,
+            path: '/health',
+            method: 'GET'
+        }, (res) => {
+            console.log(`✅ Self health check: ${res.statusCode}`);
+        });
+        healthReq.on('error', (err) => {
+            console.log(`❌ Self health check failed:`, err.message);
+        });
+        healthReq.end();
+    }, 1000);
     if (NODE_ENV === 'production') {
         console.log(`📁 Working directory: ${process.cwd()}`);
         console.log(`📁 __dirname: ${__dirname}`);
