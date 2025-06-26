@@ -2,19 +2,15 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
+      "src": "apps/frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "apps/frontend/dist"
+        "distDir": "dist"
       }
     },
     {
       "src": "apps/backend/src/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["apps/frontend/dist/**"],
-        "maxLambdaSize": "50mb"
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -35,12 +31,8 @@
       "dest": "/apps/backend/src/index.ts"
     },
     {
-      "src": "/(.*\\.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot))",
-      "dest": "/apps/backend/src/index.ts"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/apps/backend/src/index.ts"
+      "dest": "/apps/frontend/dist/index.html"
     }
   ],
   "env": {
