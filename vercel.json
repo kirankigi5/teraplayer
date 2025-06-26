@@ -1,9 +1,13 @@
 {
   "version": 2,
-  "buildCommand": "npm run vercel-build",
-  "outputDirectory": "apps/frontend/dist",
-  "installCommand": "npm install",
   "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "apps/frontend/dist"
+      }
+    },
     {
       "src": "apps/backend/src/index.ts",
       "use": "@vercel/node",

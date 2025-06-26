@@ -11,9 +11,8 @@
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=apps/backend",
     "dev:frontend": "npm run dev --workspace=apps/frontend",
-    "build": "npm run build --workspace=apps/frontend && npm run build --workspace=apps/backend",
+    "build": "cd apps/frontend && npm ci && npm run build && cd ../backend && npm ci && npm run build && cd ../..",
     "start": "NODE_ENV=production npm run start --workspace=apps/backend",
-    "vercel-build": "cd apps/frontend && npm ci && npm run build && cd ../backend && npm ci && npm run build && cd ../..",
     "postbuild": "echo 'Build completed successfully'"
   },
   "devDependencies": {
