@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "name": "teraplayer",
-  "buildCommand": "npm run vercel-build",
+  "buildCommand": "./build.sh",
   "outputDirectory": "apps/frontend/dist",
   "installCommand": "npm install",
-  "framework": null,
   "builds": [
     {
       "src": "apps/backend/src/index.ts",
