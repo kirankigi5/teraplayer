@@ -1,0 +1,14 @@
+{
+  "name": "teraplayer",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend"
+  ],
+  "dependencies": {
+    "@types/cheerio": "^1.0.0",
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "react-router-dom": "^7.6.2"
+  }
+}

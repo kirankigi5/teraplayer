@@ -1,0 +1,14 @@
+{
+  "services": [
+    {
+      "name": "backend",
+      "root": "apps/backend",
+      "startCommand": "npm run start"
+    },
+    {
+      "name": "frontend",
+      "root": "apps/frontend",
+      "startCommand": "npm run preview"
+    }
+  ]
+}
