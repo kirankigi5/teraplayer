@@ -27,8 +27,8 @@ app.use(helmet({
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN || (NODE_ENV === 'development' ? '*' : false),
-  methods: ['GET', 'POST'],
+  origin: process.env.FRONTEND_ORIGIN || (NODE_ENV === 'development' ? '*' : true),
+  methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false,
 }));
@@ -57,13 +57,52 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/parse', parseRoute);
 
+// Root endpoint for Railway health checks
+app.get('/', (_req, res) => {
+  if (NODE_ENV === 'production') {
+    // In production, serve index.html if frontend exists, otherwise show API info
+    const indexPath = path.join(frontendPath || '', 'index.html');
+    const fs = require('fs');
+    if (frontendPath && fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      res.json({
+        message: 'TeraPlayer Backend API',
+        version: '1.0.0',
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        endpoints: {
+          health: '/health',
+          parse: '/api/parse'
+        }
+      });
+    }
+  } else {
+    res.json({
+      message: 'TeraPlayer Backend API',
+      version: '1.0.0',
+      endpoints: {
+        health: '/health',
+        parse: '/api/parse'
+      }
+    });
+  }
+});
+
 // Health check endpoint
 app.get('/health', (_req, res) => {
-  res.json({ 
+  res.status(200).json({ 
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    version: '1.0.0',
+    environment: NODE_ENV,
+    port: PORT
   });
+});
+
+// Additional health check endpoint that Railway might use
+app.get('/healthz', (_req, res) => {
+  res.status(200).send('OK');
 });
 
 // API info endpoint
@@ -142,19 +181,11 @@ if (NODE_ENV === 'production') {
     res.sendFile(indexPath, (err) => {
       if (err) {
         console.error('Error serving index.html:', err);
-        res.status(500).send('Application failed to load');
-      }
-    });
-  });
-} else {
-  // Root endpoint for development
-  app.get('/', (_req, res) => {
-    res.json({
-      message: 'TeraPlayer Backend API',
-      version: '1.0.0',
-      endpoints: {
-        health: '/health',
-        parse: '/api/parse'
+        res.status(500).json({
+          success: false,
+          error: 'Application failed to load',
+          message: 'Frontend files not found'
+        });
       }
     });
   });
@@ -181,10 +212,11 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
 
 // Start server
 const port = Number(PORT);
-app.listen(port, '0.0.0.0', () => {
+const server = app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 TeraPlayer backend server running on port ${port}`);
   console.log(`📝 Environment: ${NODE_ENV}`);
   console.log(`🔗 Health check: http://localhost:${port}/health`);
+  console.log(`🌐 Server listening on 0.0.0.0:${port}`);
   
   // Log filesystem info in production for debugging
   if (NODE_ENV === 'production') {
@@ -206,4 +238,18 @@ app.listen(port, '0.0.0.0', () => {
       console.error('📁 Error checking frontend files:', err);
     }
   }
+});
+
+// Handle server errors
+server.on('error', (err) => {
+  console.error('❌ Server error:', err);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('📤 SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
+  });
 });

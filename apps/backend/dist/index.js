@@ -25,8 +25,8 @@ app.use((0, helmet_1.default)({
     },
 }));
 app.use((0, cors_1.default)({
-    origin: process.env.FRONTEND_ORIGIN || (NODE_ENV === 'development' ? '*' : false),
-    methods: ['GET', 'POST'],
+    origin: process.env.FRONTEND_ORIGIN || (NODE_ENV === 'development' ? '*' : true),
+    methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: false,
 }));
@@ -46,12 +46,48 @@ app.use((req, res, next) => {
     return next();
 });
 app.use('/api/parse', parse_1.default);
+app.get('/', (_req, res) => {
+    if (NODE_ENV === 'production') {
+        const indexPath = path_1.default.join(frontendPath || '', 'index.html');
+        const fs = require('fs');
+        if (frontendPath && fs.existsSync(indexPath)) {
+            res.sendFile(indexPath);
+        }
+        else {
+            res.json({
+                message: 'TeraPlayer Backend API',
+                version: '1.0.0',
+                status: 'healthy',
+                timestamp: new Date().toISOString(),
+                endpoints: {
+                    health: '/health',
+                    parse: '/api/parse'
+                }
+            });
+        }
+    }
+    else {
+        res.json({
+            message: 'TeraPlayer Backend API',
+            version: '1.0.0',
+            endpoints: {
+                health: '/health',
+                parse: '/api/parse'
+            }
+        });
+    }
+});
 app.get('/health', (_req, res) => {
-    res.json({
+    res.status(200).json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        version: '1.0.0'
+        version: '1.0.0',
+        environment: NODE_ENV,
+        port: PORT
     });
+});
+app.get('/healthz', (_req, res) => {
+    res.status(200).send('OK');
 });
 app.get('/api', (_req, res) => {
     res.json({
@@ -118,19 +154,11 @@ if (NODE_ENV === 'production') {
         res.sendFile(indexPath, (err) => {
             if (err) {
                 console.error('Error serving index.html:', err);
-                res.status(500).send('Application failed to load');
-            }
-        });
-    });
-}
-else {
-    app.get('/', (_req, res) => {
-        res.json({
-            message: 'TeraPlayer Backend API',
-            version: '1.0.0',
-            endpoints: {
-                health: '/health',
-                parse: '/api/parse'
+                res.status(500).json({
+                    success: false,
+                    error: 'Application failed to load',
+                    message: 'Frontend files not found'
+                });
             }
         });
     });
@@ -151,10 +179,11 @@ app.use((err, _req, res, _next) => {
     });
 });
 const port = Number(PORT);
-app.listen(port, '0.0.0.0', () => {
+const server = app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 TeraPlayer backend server running on port ${port}`);
     console.log(`📝 Environment: ${NODE_ENV}`);
     console.log(`🔗 Health check: http://localhost:${port}/health`);
+    console.log(`🌐 Server listening on 0.0.0.0:${port}`);
     if (NODE_ENV === 'production') {
         console.log(`📁 Working directory: ${process.cwd()}`);
         console.log(`📁 __dirname: ${__dirname}`);
@@ -173,4 +202,14 @@ app.listen(port, '0.0.0.0', () => {
             console.error('📁 Error checking frontend files:', err);
         }
     }
+});
+server.on('error', (err) => {
+    console.error('❌ Server error:', err);
+});
+process.on('SIGTERM', () => {
+    console.log('📤 SIGTERM received, shutting down gracefully');
+    server.close(() => {
+        console.log('✅ Server closed');
+        process.exit(0);
+    });
 });
