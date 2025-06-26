@@ -1,14 +1,25 @@
 {
   "name": "teraplayer",
+  "version": "1.0.0",
+  "description": "A Terabox link parser and media player",
   "private": true,
   "workspaces": [
     "apps/frontend",
     "apps/backend"
   ],
-  "dependencies": {
-    "@types/cheerio": "^1.0.0",
-    "axios": "^1.10.0",
-    "cheerio": "^1.1.0",
-    "react-router-dom": "^7.6.2"
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "build": "npm run build --workspace=apps/frontend && npm run build --workspace=apps/backend",
+    "start": "npm run start --workspace=apps/backend",
+    "postinstall": "npm install --workspace=apps/backend && npm install --workspace=apps/frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }

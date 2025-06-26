@@ -1,43 +1,119 @@
-/**
- * Parses a Terabox link and returns file metadata and a direct download link.
- * @param link string
- * @returns Promise<object>
- */
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
+interface ParseResult {
+  success: boolean;
+  fileName?: string;
+  fileSize?: string;
+  fileType?: string;
+  directLink?: string;
+  fileId?: string;
+  resolvedLink?: string;
+  error?: string;
+  statusCode?: number;
+  details?: string;
+}
+
 const SUPPORTED_DOMAINS = [
   'terabox.com',
+  'www.terabox.com',
   'terabox.app',
-  '1024terabox.com',
+  'www.terabox.app',
+  'terabox.fun',
+  'teraboxapp.com',
+  'www.teraboxapp.com',
+  'mirrobox.com',
+  'www.mirrobox.com',
+  'nephobox.com',
+  'www.nephobox.com',
+  'freeterabox.com',
+  'www.freeterabox.com',
   '1024tera.com',
-  't.co', // Accept Twitter shortlinks
-  // Add more domains here as needed
+  'www.1024tera.com',
+  'www.1024tera.co',
+  '4funbox.co',
+  'www.4funbox.com',
+  'momerybox.com',
+  'www.momerybox.com',
+  'tibibox.com',
+  'www.tibibox.com',
+  't.co', // Twitter shortlinks
+  'bit.ly', // Bitly shortlinks
 ];
 
+const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+/**
+ * Resolves shortlinks to their final destination
+ */
 async function resolveShortlink(link: string): Promise<string> {
   try {
-    const response = await axios.get(link, { maxRedirects: 5 });
-    // Log the final resolved URL for debugging
-    console.log('Resolved shortlink:', response.request.res.responseUrl || link);
-    return response.request.res.responseUrl || link;
-  } catch (err) {
-    console.error('Error resolving shortlink:', err);
+    const response = await axios.get(link, { 
+      maxRedirects: 5,
+      timeout: 10000,
+      headers: {
+        'User-Agent': USER_AGENT,
+      },
+    });
+    const resolvedUrl = response.request.res.responseUrl || link;
+    console.log('Resolved shortlink:', resolvedUrl);
+    return resolvedUrl;
+  } catch (error) {
+    console.error('Error resolving shortlink:', error);
     return link;
   }
 }
 
-export default async function teraboxParser(link: string): Promise<any> {
+/**
+ * Extracts file ID from various Terabox URL formats
+ */
+function extractFileId(url: URL): string | null {
+  // Handle /sharing/link?surl=... pattern
+  if (url.pathname.startsWith('/sharing/link') && url.searchParams.has('surl')) {
+    return url.searchParams.get('surl');
+  }
+  
+  // Handle /s/... pattern
+  if (url.pathname.startsWith('/s/')) {
+    const pathParts = url.pathname.split('/');
+    return pathParts[2] || null;
+  }
+  
+  // Handle other patterns
+  const pathParts = url.pathname.split('/').filter(part => part.length > 0);
+  const potentialId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
+  
+  return potentialId && potentialId.length >= 6 ? potentialId : null;
+}
+
+/**
+ * Validates if the domain is supported
+ */
+function isSupportedDomain(hostname: string): boolean {
+  return SUPPORTED_DOMAINS.some(domain => hostname.endsWith(domain));
+}
+
+/**
+ * Parses a Terabox link and returns file metadata
+ */
+export default async function teraboxParser(link: string): Promise<ParseResult> {
   try {
-    // 1. Resolve shortlinks (t.co, etc.)
-    let resolvedLink = link;
+    if (!link || typeof link !== 'string') {
+      return {
+        success: false,
+        error: 'Invalid link provided.',
+        statusCode: 400,
+      };
+    }
+
+    // Resolve shortlinks if necessary
+    let resolvedLink = link.trim();
     try {
-      const url = new URL(link.trim());
+      const url = new URL(resolvedLink);
       if (url.hostname === 't.co') {
         resolvedLink = await resolveShortlink(link);
       }
-    } catch (err) {
-      console.error('Invalid URL format:', err);
+    } catch (error) {
       return {
         success: false,
         error: 'Invalid URL format.',
@@ -45,33 +121,30 @@ export default async function teraboxParser(link: string): Promise<any> {
       };
     }
 
-    let url: URL;
+    // Parse the resolved URL
+    let parsedUrl: URL;
     try {
-      url = new URL(resolvedLink.trim());
-    } catch (err) {
-      console.error('Invalid resolved URL format:', err);
+      parsedUrl = new URL(resolvedLink);
+    } catch (error) {
       return {
         success: false,
-        error: 'Invalid URL format.',
+        error: 'Invalid resolved URL format.',
         statusCode: 400,
       };
     }
-    if (!SUPPORTED_DOMAINS.some(domain => url.hostname.endsWith(domain))) {
+
+    // Validate domain
+    if (!isSupportedDomain(parsedUrl.hostname)) {
       return {
         success: false,
-        error: `Unsupported domain. Supported: ${SUPPORTED_DOMAINS.join(', ')}`,
+        error: `Unsupported domain. Supported domains: ${SUPPORTED_DOMAINS.join(', ')}`,
         statusCode: 400,
       };
     }
-    let fileId: string | undefined;
-    // Handle /sharing/link?surl=... pattern
-    if (url.pathname.startsWith('/sharing/link') && url.searchParams.has('surl')) {
-      fileId = url.searchParams.get('surl') || undefined;
-    } else {
-      const pathParts = url.pathname.split('/');
-      fileId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
-    }
-    if (!fileId || fileId.length < 6) {
+
+    // Extract file ID
+    const fileId = extractFileId(parsedUrl);
+    if (!fileId) {
       return {
         success: false,
         error: 'Could not extract file identifier from link.',
@@ -79,29 +152,24 @@ export default async function teraboxParser(link: string): Promise<any> {
       };
     }
 
-    // 2. Attempt to fetch the Terabox page and extract a real direct link (simulated)
-    // Real implementation would require more advanced scraping or API reverse engineering
-    // Example: fetch the page and look for a direct link in the HTML (not guaranteed to work)
-    // const page = await axios.get(resolvedLink);
-    // const $ = cheerio.load(page.data);
-    // const directLink = $('a#real-download-link').attr('href') || `https://download.terabox.com/file/${fileId}`;
-
-    // Instead of simulating a direct link, return the resolved/original Terabox link for use with xdisk.me
+    // For now, return the resolved link for use with external downloaders
+    // In a real implementation, you would scrape the page or use the Terabox API
     return {
       success: true,
-      fileName: 'Sample File',
-      fileSize: '100MB',
-      fileType: 'video/mp4',
-      directLink: resolvedLink, // Use the resolved/original Terabox link
+      fileName: 'Terabox File',
+      fileSize: 'Unknown',
+      fileType: 'unknown',
+      directLink: resolvedLink,
       fileId,
       resolvedLink,
     };
-  } catch (err: any) {
-    console.error('Internal error:', err);
+
+  } catch (error: any) {
+    console.error('Internal error in teraboxParser:', error);
     return {
       success: false,
-      error: 'Internal error.',
-      details: err.message || err.toString(),
+      error: 'Internal server error.',
+      details: error.message || error.toString(),
       statusCode: 500,
     };
   }

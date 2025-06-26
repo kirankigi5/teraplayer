@@ -1,14 +1,12 @@
 {
-  "services": [
-    {
-      "name": "backend",
-      "root": "apps/backend",
-      "startCommand": "npm run start"
-    },
-    {
-      "name": "frontend",
-      "root": "apps/frontend",
-      "startCommand": "npm run preview"
-    }
-  ]
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm install && npm run build"
+  },
+  "deploy": {
+    "startCommand": "npm start",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
 }
