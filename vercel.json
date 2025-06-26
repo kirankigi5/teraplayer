@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "teraplayer",
-  "buildCommand": "npm run vercel:build",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": "apps/frontend/dist",
   "installCommand": "npm install",
   "framework": null,
@@ -10,7 +10,8 @@
       "src": "apps/backend/src/index.ts",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["apps/frontend/dist/**"]
+        "includeFiles": ["apps/frontend/dist/**"],
+        "maxLambdaSize": "50mb"
       }
     }
   ],
@@ -42,11 +43,5 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "apps/backend/src/index.ts": {
-      "maxDuration": 30,
-      "memory": 1024
-    }
   }
 }

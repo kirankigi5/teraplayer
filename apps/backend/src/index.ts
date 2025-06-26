@@ -57,7 +57,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/parse', parseRoute);
 
-// Health check endpoints (these must work for Railway)
+// Health check endpoints
 app.get('/health', (_req, res) => {
   res.status(200).json({ 
     status: 'healthy',
@@ -87,7 +87,7 @@ app.get('/api', (_req, res) => {
 // Initialize frontend path for production
 let frontendPath = '';
 if (NODE_ENV === 'production') {
-  // Try multiple possible paths for Railway compatibility
+  // Try multiple possible paths for deployment compatibility
   const possiblePaths = [
     path.join(__dirname, '../../frontend/dist'),
     path.join(__dirname, '../../../apps/frontend/dist'),
@@ -124,7 +124,7 @@ app.get('/', (_req, res) => {
         if (err) {
           console.error('Error serving index.html from root:', err);
           res.status(200).json({
-            message: 'TeraPlayer - Railway Deployment',
+            message: 'TeraPlayer - Production Deployment',
             status: 'healthy',
             version: '1.0.0',
             timestamp: new Date().toISOString()

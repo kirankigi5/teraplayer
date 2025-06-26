@@ -13,8 +13,7 @@
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "build": "npm run build --workspace=apps/frontend && npm run build --workspace=apps/backend",
     "start": "NODE_ENV=production npm run start --workspace=apps/backend",
-    "railway:install": "npm install --workspace=apps/backend && npm install --workspace=apps/frontend",
-    "vercel:build": "npm run build --workspace=apps/frontend && npm run build --workspace=apps/backend",
+    "vercel-build": "npm run build --workspace=apps/frontend && npm run build --workspace=apps/backend",
     "postbuild": "echo 'Build completed successfully'"
   },
   "devDependencies": {

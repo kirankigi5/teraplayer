@@ -101,7 +101,7 @@ app.get('/', (_req, res) => {
                 if (err) {
                     console.error('Error serving index.html from root:', err);
                     res.status(200).json({
-                        message: 'TeraPlayer - Railway Deployment',
+                        message: 'TeraPlayer - Production Deployment',
                         status: 'healthy',
                         version: '1.0.0',
                         timestamp: new Date().toISOString()
