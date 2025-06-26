@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "name": "teraplayer",
+  "buildCommand": "npm run vercel:build",
+  "outputDirectory": "apps/frontend/dist",
+  "installCommand": "npm install",
+  "framework": null,
+  "builds": [
+    {
+      "src": "apps/backend/src/index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["apps/frontend/dist/**"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/apps/backend/src/index.ts"
+    },
+    {
+      "src": "/health",
+      "dest": "/apps/backend/src/index.ts"
+    },
+    {
+      "src": "/healthz",
+      "dest": "/apps/backend/src/index.ts"
+    },
+    {
+      "src": "/parse",
+      "dest": "/apps/backend/src/index.ts"
+    },
+    {
+      "src": "/(.*\\.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot))",
+      "dest": "/apps/backend/src/index.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/apps/backend/src/index.ts"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "apps/backend/src/index.ts": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  }
+}
