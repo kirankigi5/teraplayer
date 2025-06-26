@@ -63,11 +63,64 @@ app.get('/api', (_req, res) => {
         }
     });
 });
+let frontendPath = '';
 if (NODE_ENV === 'production') {
-    const frontendPath = path_1.default.join(__dirname, '../../frontend/dist');
-    app.use(express_1.default.static(frontendPath));
+    const possiblePaths = [
+        path_1.default.join(__dirname, '../../frontend/dist'),
+        path_1.default.join(__dirname, '../../../apps/frontend/dist'),
+        path_1.default.join(process.cwd(), 'apps/frontend/dist'),
+        path_1.default.join(process.cwd(), 'frontend/dist')
+    ];
+    for (const testPath of possiblePaths) {
+        try {
+            const fs = require('fs');
+            if (fs.existsSync(testPath)) {
+                frontendPath = testPath;
+                break;
+            }
+        }
+        catch { }
+    }
+    if (!frontendPath) {
+        console.error('❌ Frontend dist folder not found! Tried paths:', possiblePaths);
+        frontendPath = possiblePaths[0] || path_1.default.join(__dirname, '../../frontend/dist');
+    }
+    console.log(`📁 Serving static files from: ${frontendPath}`);
+    app.use(express_1.default.static(frontendPath, {
+        maxAge: '1d',
+        etag: true,
+        lastModified: true
+    }));
+    app.get('/favicon.svg', (_req, res) => {
+        res.sendFile(path_1.default.join(frontendPath, 'favicon.svg'), (err) => {
+            if (err) {
+                console.log('Favicon not found, checking assets folder...');
+                const fs = require('fs');
+                const assetsPath = path_1.default.join(frontendPath, 'assets');
+                try {
+                    const files = fs.readdirSync(assetsPath);
+                    const faviconFile = files.find((file) => file.startsWith('favicon') && file.endsWith('.svg'));
+                    if (faviconFile) {
+                        res.sendFile(path_1.default.join(assetsPath, faviconFile));
+                    }
+                    else {
+                        res.status(404).send('Favicon not found');
+                    }
+                }
+                catch {
+                    res.status(404).send('Favicon not found');
+                }
+            }
+        });
+    });
     app.get('*', (_req, res) => {
-        res.sendFile(path_1.default.join(frontendPath, 'index.html'));
+        const indexPath = path_1.default.join(frontendPath, 'index.html');
+        res.sendFile(indexPath, (err) => {
+            if (err) {
+                console.error('Error serving index.html:', err);
+                res.status(500).send('Application failed to load');
+            }
+        });
     });
 }
 else {
@@ -97,8 +150,27 @@ app.use((err, _req, res, _next) => {
         error: 'Internal server error'
     });
 });
-app.listen(PORT, () => {
-    console.log(`🚀 TeraPlayer backend server running on port ${PORT}`);
+const port = Number(PORT);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`🚀 TeraPlayer backend server running on port ${port}`);
     console.log(`📝 Environment: ${NODE_ENV}`);
-    console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+    console.log(`🔗 Health check: http://localhost:${port}/health`);
+    if (NODE_ENV === 'production') {
+        console.log(`📁 Working directory: ${process.cwd()}`);
+        console.log(`📁 __dirname: ${__dirname}`);
+        console.log(`📁 Frontend path used: ${frontendPath}`);
+        try {
+            const fs = require('fs');
+            const exists = fs.existsSync(frontendPath);
+            console.log(`📁 Frontend dist exists: ${exists}`);
+            if (exists) {
+                const files = fs.readdirSync(frontendPath);
+                console.log(`📁 Frontend dist files:`, files);
+            }
+            console.log(`📁 Current directory contents:`, fs.readdirSync(process.cwd()));
+        }
+        catch (err) {
+            console.error('📁 Error checking frontend files:', err);
+        }
+    }
 });
