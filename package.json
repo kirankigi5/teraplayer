@@ -8,6 +8,7 @@
     "dev": "vite",
     "dev:api": "node server/api-server.js",
     "dev:full": "concurrently \"npm run dev:api\" \"npm run dev\"",
+    "start": "node server/api-server.js",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist"
