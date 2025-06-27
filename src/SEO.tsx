@@ -35,7 +35,7 @@ const SEO: React.FC<SEOProps> = ({ language }) => {
   const t = translations[language as keyof typeof translations] || translations['en'];
   return (
     <Helmet htmlAttributes={{ lang: language }}>
-      <title>{t.title} | TeraPlayer</title>
+      <title>{t.title} | TeraDownloaderPlayer</title>
       <meta name="description" content={t.subtitle} />
       <meta name="keywords" content="terabox video player online, mirrobox player, nephobox downloader, 4funbox converter, freeterabox player, 1024tera downloader, tibibox player, momerybox downloader, terabox online video player, terabox video downloader, terabox player, terabox online player, terabox direct download, terabox link converter, terabox downloader online, terabox video streaming, terabox direct link, terabox bypass, how to play videos on terabox, all terabox domains" />
       <meta name="robots" content="index, follow" />
@@ -50,7 +50,7 @@ const SEO: React.FC<SEOProps> = ({ language }) => {
       <meta property="og:title" content={t.title} />
       <meta property="og:description" content={t.subtitle} />
       <meta property="og:image" content={ogImage} />
-      <meta property="og:site_name" content="TeraPlayer" />
+      <meta property="og:site_name" content="TeraDownloaderPlayer" />
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content={siteUrl + (language === 'en' ? '' : `/${language}`)} />
@@ -75,7 +75,7 @@ const SEO: React.FC<SEOProps> = ({ language }) => {
           },
           creator: {
             '@type': 'Organization',
-            name: 'TeraPlayer',
+            name: 'TeraDownloaderPlayer',
           },
           keywords:
             'terabox video player online, mirrobox player, nephobox downloader, 4funbox converter, freeterabox player, 1024tera downloader, tibibox player, momerybox downloader, terabox online video player, terabox video downloader, terabox player, terabox online player, terabox direct download, all terabox domains',

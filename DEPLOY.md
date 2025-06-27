@@ -1,4 +1,4 @@
-# TeraPlayer - Railway Deployment Guide
+# TeraDownloaderPlayer - Railway Deployment Guide
 
 ## Quick Deploy to Railway
 
@@ -6,7 +6,7 @@
    ```bash
    git init
    git add .
-   git commit -m "Initial commit - TeraPlayer with dark mode"
+   git commit -m "Initial commit - TeraDownloaderPlayer with dark mode"
    git branch -M main
    git remote add origin https://github.com/yourusername/teraplayer.git
    git push -u origin main

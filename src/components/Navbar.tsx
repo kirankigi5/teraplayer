@@ -65,11 +65,11 @@ const Navbar: React.FC = () => {
     <nav className="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm fixed top-0 left-0 z-20">
       <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-2 relative">
         <Link to="/" className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg">
-          <svg width="28" height="28" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="TeraPlayer logo">
+          <svg width="28" height="28" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="TeraDownloaderPlayer logo">
             <circle cx="28" cy="28" r="28" fill="#2563eb"/>
             <polygon points="22,18 40,28 22,38" fill="#fff"/>
           </svg>
-          TeraPlayer
+          TeraDownloaderPlayer
         </Link>
         
         {/* Desktop nav links */}

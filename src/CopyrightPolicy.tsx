@@ -27,19 +27,19 @@ const CopyrightPolicy = () => {
               <div className="prose prose-lg max-w-none">
                 <div className="bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-400 dark:border-blue-500 p-4 mb-6">
                   <p className="text-blue-800 dark:text-blue-300">
-                    <strong>Important:</strong> TeraPlayer is a link parsing service only. We do not host, store, upload, or cache any files or content on our servers. All content remains on the original third-party platforms.
+                    <strong>Important:</strong> TeraDownloaderPlayer is a link parsing service only. We do not host, store, upload, or cache any files or content on our servers. All content remains on the original third-party platforms.
                   </p>
                 </div>
 
                 <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Our Policy</h2>
                 <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  TeraPlayer respects the intellectual property rights of others and expects users to do the same. 
+                  TeraDownloaderPlayer respects the intellectual property rights of others and expects users to do the same. 
                   We respond promptly to valid copyright infringement notices and comply with applicable copyright laws.
                 </p>
 
                 <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Copyright Infringement Notice</h2>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  If you are a copyright holder and believe that TeraPlayer is facilitating access to content that infringes your rights, 
+                  If you are a copyright holder and believe that TeraDownloaderPlayer is facilitating access to content that infringes your rights, 
                   please contact us with the following information:
                 </p>
                 
@@ -117,7 +117,7 @@ const CopyrightPolicy = () => {
                 <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">User Responsibilities</h2>
                 <div className="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-400 dark:border-red-500 p-4 mb-6">
                   <ul className="space-y-2 text-red-800 dark:text-red-300">
-                    <li>• Users are solely responsible for the links they submit to TeraPlayer</li>
+                    <li>• Users are solely responsible for the links they submit to TeraDownloaderPlayer</li>
                     <li>• Users must not submit links to infringing, illegal, or unauthorized content</li>
                     <li>• Users agree to respect intellectual property rights of content creators</li>
                     <li>• Violation of these terms may result in service access restrictions</li>
@@ -135,7 +135,7 @@ const CopyrightPolicy = () => {
                     This policy is subject to change. Last updated: January 2025
                   </p>
                   <p className="mt-2">
-                    TeraPlayer operates under applicable copyright laws and regulations.
+                    TeraDownloaderPlayer operates under applicable copyright laws and regulations.
                   </p>
                 </div>
               </div>

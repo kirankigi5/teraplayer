@@ -19,16 +19,16 @@ const About = () => {
                 </svg>
                 Back to Home
               </Link>
-              <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">About TeraPlayer</h1>
+              <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">About TeraDownloaderPlayer</h1>
               <p className="text-xl text-gray-600 dark:text-gray-300">Universal TeraBox link parser supporting all domains and mirrors</p>
             </div>
 
             {/* Main content */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
               <div className="prose prose-lg max-w-none">
-                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">What is TeraPlayer?</h2>
+                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">What is TeraDownloaderPlayer?</h2>
                 <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  TeraPlayer is a comprehensive, user-friendly web application that supports ALL TeraBox domains and mirrors. 
+                  TeraDownloaderPlayer is a comprehensive, user-friendly web application that supports ALL TeraBox domains and mirrors. 
                   Our universal parser works with terabox.com, mirrobox.com, nephobox.com, 4funbox.co, freeterabox.com, 1024tera.com, 
                   tibibox.com, momerybox.com, and many more TeraBox variants. We extract metadata from any TeraBox URL and provide 
                   convenient access to external download services.
@@ -74,7 +74,7 @@ const About = () => {
                 <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Important Disclaimers</h2>
                 <div className="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 dark:border-yellow-500 p-4 mb-6">
                   <p className="text-gray-700 dark:text-gray-300">
-                    <strong>TeraPlayer</strong> is a link parsing service only. We do not:
+                    <strong>TeraDownloaderPlayer</strong> is a link parsing service only. We do not:
                   </p>
                   <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700 dark:text-gray-300">
                     <li>Host, upload, store, or cache any files or content</li>

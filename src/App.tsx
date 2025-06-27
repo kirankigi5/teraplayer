@@ -67,9 +67,9 @@ function App() {
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center p-4 transition-colors duration-200 pt-20">
         
         <header className="w-full max-w-2xl flex flex-col items-center mb-6">
-          {/* Play icon SVG for TeraPlayer branding */}
+          {/* Play icon SVG for TeraDownloaderPlayer branding */}
           <div className="mb-2">
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="TeraPlayer logo">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="TeraDownloaderPlayer logo">
               <circle cx="28" cy="28" r="28" fill="#2563eb"/>
               <polygon points="22,18 40,28 22,38" fill="#fff"/>
             </svg>
@@ -158,7 +158,7 @@ function App() {
             </div>
             
             <div className="mt-3 text-xs text-gray-600 dark:text-gray-400">
-              TeraPlayer is not affiliated with TeraBox. All trademarks belong to their respective owners.
+              TeraDownloaderPlayer is not affiliated with TeraBox. All trademarks belong to their respective owners.
             </div>
           </div>
         )}
@@ -277,7 +277,7 @@ function App() {
               <strong className="text-gray-600 dark:text-gray-300">Supported Domains:</strong> 
               <span className="ml-1">TeraBox.com • MirroBox.com • NephoBox.com • 4FunBox.co • FreeteraBox.com • 1024Tera.com • TibiBox.com • MomeryBox.com</span>
             </div>
-            © 2025 TeraPlayer - Free TeraBox Video Player Online. Not affiliated with TeraBox, Flextech Inc, or any mentioned domains.
+            © 2025 TeraDownloaderPlayer - Free TeraBox Video Player Online. Not affiliated with TeraBox, Flextech Inc, or any mentioned domains.
             <div className="mt-2 space-x-4">
               <a href="/about" className="underline hover:text-gray-600 dark:hover:text-gray-300">About TeraBox Player</a>
               <span className="mx-2">|</span>

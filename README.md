@@ -1,4 +1,4 @@
-# TeraPlayer
+# TeraDownloaderPlayer
 
 A modern web application for parsing Terabox links and providing easy media download/streaming capabilities.
 
@@ -95,7 +95,7 @@ teraplayer/
 
 ## Supported Domains
 
-TeraPlayer supports all Terabox domains and mirrors:
+TeraDownloaderPlayer supports all Terabox domains and mirrors:
 - terabox.com, teraboxapp.com
 - 1024tera.com, 4funbox.com
 - nephobox.com, terabox.app

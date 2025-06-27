@@ -32,7 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     return res.status(200).json({ 
       success: true, 
-      message: 'TeraPlayer API is running',
+      message: 'TeraDownloaderPlayer API is running',
       timestamp: new Date().toISOString()
     });
   }

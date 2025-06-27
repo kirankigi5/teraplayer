@@ -1,2 +1,2 @@
-# Example ads.txt for TeraPlayer
+# Example ads.txt for TeraDownloaderPlayer
 # Replace with your authorized digital sellers if you use programmatic ads
