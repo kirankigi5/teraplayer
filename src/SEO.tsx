@@ -6,8 +6,8 @@ interface SEOProps {
   language: string;
 }
 
-const siteUrl = 'https://teraplayer.com';
-const ogImage = `${siteUrl}/og-image.png`;
+const siteUrl = 'https://teradownloaderplayer.com';
+const ogImage = `${siteUrl}/favicon.svg`;
 
 const hreflangs = [
   { code: 'en', url: `${siteUrl}/` },
