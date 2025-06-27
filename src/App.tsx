@@ -8,6 +8,7 @@ interface FileInfo {
   directLink: string;
   fileId?: string;
   resolvedLink?: string;
+  playUrl?: string;
 }
 
 const TERADOWNLOADER_URL = 'https://teradownloader.com/download?l=';
@@ -108,7 +109,7 @@ function App() {
           
           <div className="flex flex-wrap gap-3 mt-4">
             <a
-              href={TERADOWNLOADER_URL + encodeURIComponent(fileInfo.directLink)}
+              href={fileInfo.playUrl || fileInfo.directLink}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition flex items-center"
               target="_blank"
               rel="noopener noreferrer"

@@ -40,11 +40,24 @@ app.post('/api/parse', async (req, res) => {
 
     console.log(`Parsing link: ${link}`);
     
+    // Extract surl parameter from TeraBox link
+    let playUrl = link;
+    try {
+      const url = new URL(link);
+      const surl = url.searchParams.get('surl');
+      if (surl) {
+        playUrl = `https://mdiskplay.com/terabox/${surl}?nid=mcen4r4yvg5dzyxf6k`;
+      }
+    } catch (error) {
+      // fallback: use original link
+    }
+
     // Mock response for testing - replace with actual parser later
     const result = {
       success: true,
       fileType: "video/mp4",
       directLink: link,
+      playUrl,
       downloadLinks: [
         { quality: "HD", url: "https://example.com/download/hd" },
         { quality: "SD", url: "https://example.com/download/sd" }
