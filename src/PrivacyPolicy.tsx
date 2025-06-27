@@ -1,16 +1,11 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import ThemeToggle from './components/ThemeToggle';
 import Navbar from './components/Navbar';
 
 const PrivacyPolicy: React.FC = () => (
   <>
     <Navbar />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200 pt-20">
-      {/* Theme Toggle - positioned at top right */}
-      <div className="fixed top-4 right-4 z-10">
-        <ThemeToggle />
-      </div>
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-4">

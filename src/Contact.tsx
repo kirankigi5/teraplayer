@@ -1,16 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ThemeToggle from './components/ThemeToggle';
 import Navbar from './components/Navbar';
 
 const Contact: React.FC = () => (
   <>
     <Navbar />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200 pt-20">
-      {/* Theme Toggle - positioned at top right */}
-      <div className="fixed top-4 right-4 z-10">
-        <ThemeToggle />
-      </div>
       <div className="container mx-auto px-4 py-8">
         {/* Back to Home button - prominent top position */}
         <div className="text-center mb-8">
