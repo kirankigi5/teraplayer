@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import ThemeToggle from './components/ThemeToggle';
 
 interface FileInfo {
-  fileName: string;
-  fileSize: string;
+  fileName?: string;
+  fileSize?: string;
   fileType: string;
   directLink: string;
-  fileId: string;
+  fileId?: string;
   resolvedLink?: string;
 }
 
@@ -89,14 +89,18 @@ function App() {
       {fileInfo && (
         <div className="mt-6 bg-white dark:bg-gray-800 rounded shadow p-6 w-full max-w-md">
           <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">TeraBox Video Ready to Play</h2>
-          <div className="mb-2">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">File Name:</span> 
-            <span className="ml-1 text-gray-900 dark:text-white">{fileInfo.fileName}</span>
-          </div>
-          <div className="mb-2">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">File Size:</span> 
-            <span className="ml-1 text-gray-900 dark:text-white">{fileInfo.fileSize}</span>
-          </div>
+          {fileInfo.fileName && (
+            <div className="mb-2">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">File Name:</span> 
+              <span className="ml-1 text-gray-900 dark:text-white">{fileInfo.fileName}</span>
+            </div>
+          )}
+          {fileInfo.fileSize && (
+            <div className="mb-2">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">File Size:</span> 
+              <span className="ml-1 text-gray-900 dark:text-white">{fileInfo.fileSize}</span>
+            </div>
+          )}
           <div className="mb-2">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">File Type:</span> 
             <span className="ml-1 font-mono text-gray-900 dark:text-white">{fileInfo.fileType}</span>
@@ -108,7 +112,7 @@ function App() {
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition flex items-center"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Play ${fileInfo.fileName} online`}
+              aria-label={`Play ${fileInfo.fileName || 'video'} online`}
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10v18a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h6l4 4z" />
@@ -120,7 +124,7 @@ function App() {
               className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 transition flex items-center"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Download ${fileInfo.fileName}`}
+              aria-label={`Download ${fileInfo.fileName || 'file'}`}
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

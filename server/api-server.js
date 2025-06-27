@@ -43,8 +43,6 @@ app.post('/api/parse', async (req, res) => {
     // Mock response for testing - replace with actual parser later
     const result = {
       success: true,
-      fileName: "Sample Video.mp4",
-      fileSize: "1.2 GB",
       fileType: "video/mp4",
       directLink: link,
       downloadLinks: [
