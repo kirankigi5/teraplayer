@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import App from "./App";
 import About from "./About";
 import CopyrightPolicy from "./CopyrightPolicy";
+import PrivacyPolicy from "./PrivacyPolicy";
+import Contact from "./Contact";
 
 export default function Root() {
   return (
@@ -11,6 +13,8 @@ export default function Root() {
         <Route path="/" element={<App />} />
         <Route path="/about" element={<About />} />
         <Route path="/copyright-policy" element={<CopyrightPolicy />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );

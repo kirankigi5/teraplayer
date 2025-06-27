@@ -262,7 +262,12 @@ function App() {
           © 2025 TeraPlayer - Free TeraBox Video Player Online. Not affiliated with TeraBox, Flextech Inc, or any mentioned domains.
           <div className="mt-2 space-x-4">
             <a href="/about" className="underline hover:text-gray-600 dark:hover:text-gray-300">About TeraBox Player</a>
+            <span className="mx-2">|</span>
             <a href="/copyright-policy" className="underline hover:text-gray-600 dark:hover:text-gray-300">Copyright Policy</a>
+            <span className="mx-2">|</span>
+            <a href="/privacy-policy" className="underline hover:text-gray-600 dark:hover:text-gray-300">Privacy Policy</a>
+            <span className="mx-2">|</span>
+            <a href="/contact" className="underline hover:text-gray-600 dark:hover:text-gray-300">Contact</a>
           </div>
         </div>
       </footer>
