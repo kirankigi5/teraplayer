@@ -84,7 +84,7 @@ function App() {
         <header className="w-full max-w-2xl flex flex-col items-center mb-6">
           {/* Play icon SVG for TeraPlayer branding */}
           <div className="mb-2">
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="TeraPlayer logo">
               <circle cx="28" cy="28" r="28" fill="#2563eb"/>
               <polygon points="22,18 40,28 22,38" fill="#fff"/>
             </svg>
