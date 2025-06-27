@@ -40,11 +40,23 @@ app.post('/api/parse', async (req, res) => {
 
     console.log(`Parsing link: ${link}`);
     
-    // Extract surl parameter from TeraBox link
+    // Extract surl parameter from TeraBox link or /s/{code} path
     let playUrl = link;
+    let surl = null;
     try {
       const url = new URL(link);
-      const surl = url.searchParams.get('surl');
+      surl = url.searchParams.get('surl');
+      if (!surl) {
+        // Try to extract from /s/{code} path
+        const match = url.pathname.match(/\/s\/(\w+)/);
+        if (match && match[1]) {
+          surl = match[1];
+          // Remove leading '1' if present (as in 1TplMakwCWyNOrPxTjdNiMg)
+          if (surl.startsWith('1') && surl.length > 1) {
+            surl = surl.substring(1);
+          }
+        }
+      }
       if (surl) {
         playUrl = `https://mdiskplay.com/terabox/${surl}?nid=mcen4r4yvg5dzyxf6k`;
       }

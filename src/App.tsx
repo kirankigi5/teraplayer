@@ -47,6 +47,32 @@ function App() {
         <ThemeToggle />
       </div>
       
+      {/* Language Selection Dropdown */}
+      <div className="fixed top-16 right-4 z-10 w-32">
+        <select
+          className="px-2 py-1 rounded text-xs border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring w-full"
+          value={"pt"} // default to Portuguese for now
+          // onChange={e => setLanguage(e.target.value)}
+          disabled
+        >
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="de">Deutsch</option>
+          <option value="id">Bahasa Indonesia</option>
+          <option value="pt">Português</option>
+          <option value="es">Español</option>
+          <option value="uk">українська</option>
+          <option value="fr">Français</option>
+          <option value="it">Italiano</option>
+          <option value="th">ภาษาไทย</option>
+          <option value="bn">বাংলা</option>
+          <option value="cs">Čeština</option>
+          <option value="ko">한국어</option>
+          <option value="ms">Bahasa Melayu</option>
+          <option value="vi">Tiếng Việt</option>
+        </select>
+      </div>
+      
       <header className="w-full max-w-2xl flex flex-col items-center mb-6">
         {/* Play icon SVG for TeraPlayer branding */}
         <div className="mb-2">
