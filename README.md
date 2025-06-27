@@ -3,14 +3,17 @@
 A modern web application for parsing Terabox links and providing easy media download/streaming capabilities.
 
 ## 🚀 Live Demo
-Deploy on Vercel: [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/kirankigi5/teraplayer)
+
+The application is deployed on Render and can be accessed here:
+
+**[https://teradownloader-a1og.onrender.com/](https://teradownloader-a1og.onrender.com/)**
 
 ## Features
 
 - 🎥 Parse Terabox links and extract media information
 - 🌙 Dark mode with system preference detection
 - 🚀 Clean, modern UI built with React and Tailwind CSS
-- ⚡ Fast backend API built with Express.js and TypeScript
+- ⚡ Fast backend API built with Express.js
 - 📱 Responsive design for all devices
 - 🔒 Secure with proper CORS and security headers
 - 🌐 Universal support for all Terabox domains and mirrors
@@ -27,8 +30,6 @@ Deploy on Vercel: [![Deploy with Vercel](https://vercel.com/button)](https://ver
 
 ### Backend
 - Node.js with Express.js
-- TypeScript for type safety
-- Helmet for security headers
 - CORS for cross-origin requests
 
 ## Development
@@ -43,20 +44,13 @@ Deploy on Vercel: [![Deploy with Vercel](https://vercel.com/button)](https://ver
 npm install
 
 # Start development servers (both frontend and backend)
-npm run dev
-
-# Or start individually
-npm run dev:backend
-npm run dev:frontend
+npm run dev:full
 ```
 
 ### Building for Production
 ```bash
-# Build both apps
+# Build the frontend application
 npm run build
-
-# Or use Vercel build command
-npm run vercel-build
 
 # Start production server
 npm start
@@ -64,37 +58,32 @@ npm start
 
 ## Deployment
 
-### Vercel (Recommended)
-1. Fork this repository
-2. Connect to Vercel
-3. Use these settings:
-   - **Framework:** Other
-   - **Root Directory:** `./`
-   - **Build Command:** `npm run vercel-build`
-   - **Output Directory:** `apps/frontend/dist`
-   - **Install Command:** `npm install`
+This project is configured for deployment on platforms like Render.
 
-See [VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md) for detailed instructions.
+### Render Deployment Settings
+1.  Fork this repository.
+2.  Create a new "Web Service" on Render and connect your GitHub repository.
+3.  Use the following settings:
+    -   **Environment:** `Node`
+    -   **Root Directory:** (leave blank)
+    -   **Build Command:** `npm install && npm run build`
+    -   **Start Command:** `npm start`
+    -   **Health Check Path:** `/api/health`
 
 ## Project Structure
 
 ```
 teraplayer/
-├── apps/
-│   ├── backend/          # Express.js API server
-│   │   ├── src/
-│   │   │   ├── index.ts  # Main server file
-│   │   │   ├── routes/   # API routes
-│   │   │   └── utils/    # Utility functions
-│   │   └── package.json
-│   └── frontend/         # React application
-│       ├── src/
-│       │   ├── App.tsx   # Main app component
-│       │   ├── main.tsx  # Entry point
-│       │   └── components/
-│       └── package.json
-├── package.json          # Root package.json with workspaces
-├── vercel.json           # Vercel deployment config
+├── server/                 # Express.js API server
+│   └── api-server.js       # Main server file
+├── src/                    # React frontend application
+│   ├── App.tsx             # Main app component
+│   ├── main.tsx            # Entry point
+│   └── components/
+├── public/                 # Public assets
+├── package.json            # Project dependencies and scripts
+├── vite.config.ts          # Vite configuration
+├── tailwind.config.js      # Tailwind CSS configuration
 └── README.md
 ```
 
