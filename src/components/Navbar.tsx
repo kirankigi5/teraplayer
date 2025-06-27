@@ -49,6 +49,16 @@ const Navbar: React.FC = () => {
         Privacy
       </Link>
       <Link 
+        to="/terms-of-service" 
+        className={location.pathname === '/terms-of-service' 
+          ? "font-semibold text-blue-600 dark:text-blue-300 block px-3 py-2 hover:bg-gray-100 md:block md:px-0 md:py-0 md:hover:bg-transparent" 
+          : "text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-300 block px-3 py-2 hover:bg-gray-100 md:block md:px-0 md:py-0 md:hover:bg-transparent"
+        } 
+        onClick={() => setMenuOpen(false)}
+      >
+        Terms
+      </Link>
+      <Link 
         to="/contact" 
         className={location.pathname === '/contact' 
           ? "font-semibold text-blue-600 dark:text-blue-300 block px-3 py-2 hover:bg-gray-100 md:block md:px-0 md:py-0 md:hover:bg-transparent" 

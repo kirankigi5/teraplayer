@@ -285,6 +285,8 @@ function App() {
               <span className="mx-2">|</span>
               <a href="/privacy-policy" className="underline hover:text-gray-600 dark:hover:text-gray-300">Privacy Policy</a>
               <span className="mx-2">|</span>
+              <a href="/terms-of-service" className="underline hover:text-gray-600 dark:hover:text-gray-300">Terms of Service</a>
+              <span className="mx-2">|</span>
               <a href="/contact" className="underline hover:text-gray-600 dark:hover:text-gray-300">Contact</a>
             </div>
           </div>
