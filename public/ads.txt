@@ -1,0 +1,2 @@
+# Example ads.txt for TeraPlayer
+# Replace with your authorized digital sellers if you use programmatic ads

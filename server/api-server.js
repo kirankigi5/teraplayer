@@ -3,6 +3,7 @@ import cors from 'cors';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import path from 'path';
+import helmet from 'helmet';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -18,6 +19,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(helmet());
 
 // Serve static files from the React frontend app
 const staticPath = path.join(__dirname, '..', 'dist');
@@ -28,6 +30,13 @@ if (fs.existsSync(staticPath)) {
   console.error('Static path does NOT exist. Build probably failed or path is wrong.');
 }
 app.use(express.static(staticPath));
+
+// Serve ads.txt with correct content type
+app.get('/ads.txt', (req, res) => {
+  const adsPath = path.join(__dirname, '..', 'public', 'ads.txt');
+  res.type('text/plain');
+  fs.createReadStream(adsPath).pipe(res);
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -115,6 +124,13 @@ app.get('*', (req, res) => {
 
 // Add a catch-all for other methods to provide a clear 404
 app.use((req, res, next) => {
+  // Serve custom 404 page for GET requests
+  if (req.method === 'GET') {
+    const notFoundPath = path.join(__dirname, '..', 'public', '404.html');
+    if (fs.existsSync(notFoundPath)) {
+      return res.status(404).sendFile(notFoundPath);
+    }
+  }
   res.status(404).json({
     success: false,
     error: `Route not found: Cannot ${req.method} ${req.path}`
