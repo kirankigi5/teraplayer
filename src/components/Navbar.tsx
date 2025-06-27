@@ -86,7 +86,8 @@ const Navbar: React.FC = () => {
             value={localStorage.getItem('language') || 'en'}
             onChange={e => {
               localStorage.setItem('language', e.target.value);
-              window.location.reload();
+              // Trigger a custom event to notify other components
+              window.dispatchEvent(new CustomEvent('languageChange', { detail: e.target.value }));
             }}
           >
             <option value="en">English</option>

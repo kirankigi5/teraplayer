@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import translations from './i18n';
 import SEO from './SEO';
 import Navbar from './components/Navbar';
@@ -20,8 +20,24 @@ function App() {
   const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState<'en' | 'pt'>('en');
-  const t = translations[language] || translations['en'];
+  const [language, setLanguage] = useState<string>(() => {
+    return localStorage.getItem('language') || 'en';
+  });
+  
+  // Listen for language changes from localStorage
+  useEffect(() => {
+    const handleLanguageChange = (e: CustomEvent) => {
+      setLanguage(e.detail);
+    };
+    
+    window.addEventListener('languageChange', handleLanguageChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('languageChange', handleLanguageChange as EventListener);
+    };
+  }, []);
+  
+  const t = translations[language as keyof typeof translations] || translations['en'];
 
   const handleParse = async (e: React.FormEvent) => {
     e.preventDefault();
